@@ -38,7 +38,8 @@ def crear_preferencia(user_id, creditos):
             "pending": "http://127.0.0.1:5000/"
         },
 
-        "notification_url": "https://aniyah-nonrepresentational-danna.ngrok-free.dev/webhook"
+        "notification_url": "https://autoreels-production.up.railway.app/webhook",
+
 
     }
 
