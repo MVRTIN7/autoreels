@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tu Reel Está Listo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #020617;
+            color: white;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+        .box {
+            width: 420px;
+            background: #020617;
+            border-radius: 12px;
+            text-align: center;
+        }
+        video {
+            width: 100%;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+        button {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            font-size: 16px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        .loader {
+            margin-top: 15px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>🎬 Tu Reel está listo</h2>
+
+    <!-- ✅ PREVIEW VIDEO -->
+    <video controls>
+        <source src="{{ url_for('video', filename=video) }}" type="video/mp4">
+        Tu navegador no soporta video.
+    </video>
+
+    <!-- ✅ DESCARGA -->
+    <a href="{{ url_for('video', filename=video) }}" download>
+        <button>⬇ Descargar Reel</button>
+    </a>
+
+    <div class="loader">
+        ⚠️ Este video se eliminará automáticamente al salir de la página
+    </div>
+</div>
+
+<script>
+    // 🔥 BORRAR VIDEO AL SALIR
+    window.addEventListener("beforeunload", function () {
+        navigator.sendBeacon(
+            "/borrar",
+            JSON.stringify({ video: "{{ video }}" })
+        );
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>AutoReels - Generador</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+        .container {
+            width: 420px;
+            background: #020617;
+            padding: 25px;
+            border-radius: 12px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: none;
+        }
+        .checkbox {
+            margin-top: 10px;
+        }
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            font-size: 16px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        #preview img {
+            width: 120px;
+            margin: 5px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🚗 AutoReels</h1>
+
+    <!-- 💳 CRÉDITOS -->
+    <p style="text-align:center; margin-bottom:10px;">
+        Créditos disponibles: <b>{{ creditos }}</b>
+    </p>
+
+    <form action="/crear-pago" method="POST">
+        <button name="creditos" value="1">Comprar 1 crédito</button>
+        <button name="creditos" value="5">Comprar 5 créditos</button>
+        <button name="creditos" value="10">Comprar 10 créditos</button>
+    </form>
+
+    <hr style="margin:25px 0; border-color:#1e293b;">
+
+     <!-- 🎬 FORMULARIO PRINCIPAL -->
+
+    <form method="POST" action="/generar" enctype="multipart/form-data">
+
+        <label>Marca</label>
+        <input type="text" name="marca" placeholder="BMW" required>
+
+        <label>Modelo</label>
+        <input type="text" name="modelo" placeholder="320i" required>
+
+        <label>Año</label>
+        <input type="text" name="anio" placeholder="2014" required>
+
+        <label>Precio</label>
+        <input type="text" name="precio" placeholder="10.900.000">
+
+        <label>WhatsApp</label>
+        <input type="text" name="whatsapp" placeholder="+56912345678">
+
+        <div class="checkbox">
+            <input type="checkbox" name="mostrar_precio" checked>
+            Mostrar precio
+        </div>
+
+        <div class="checkbox">
+            <input type="checkbox" name="mostrar_whatsapp" checked>
+            Mostrar WhatsApp
+        </div>
+
+        <!-- 📸 FOTOS -->
+        <label>Fotos del auto (máx 10)</label>
+        <input type="file"
+               name="fotos"
+               multiple
+               accept="image/jpeg,image/png"
+               onchange="previewFotos(this)"
+               required>
+
+        <div id="preview"></div>
+
+        <!-- 🎵 MÚSICA -->
+        <label>🎵 Música (opcional)</label>
+        <input type="file" name="musica" accept=".mp3">
+
+        <div class="checkbox">
+            <input type="checkbox" name="usar_musica">
+            Usar música
+        </div>
+
+        <button type="submit" id="btnGenerar">
+            🎬 Generar Reel
+        </button>
+
+        <!-- ⏳ PROGRESO -->
+        <div id="progreso" style="display:none; margin-top:15px;">
+            <div style="background:#1e293b; border-radius:8px; overflow:hidden;">
+                <div id="barra" style="
+                    width:0%;
+                    height:16px;
+                    background:#22c55e;
+                    transition: width 0.5s;
+                "></div>
+            </div>
+            <p id="textoProgreso" style="font-size:14px; margin-top:6px;">
+                Procesando imágenes...
+            </p>
+        </div>
+
+    </form>
+</div>
+
+<!-- ===== PREVIEW FOTOS ===== -->
+<script>
+function previewFotos(input) {
+    const preview = document.getElementById("preview");
+    preview.innerHTML = "";
+
+    if (input.files.length > 10) {
+        alert("❌ Máximo 10 fotos permitidas");
+        input.value = "";
+        return;
+    }
+
+    for (let file of input.files) {
+        if (!file.type.startsWith("image/")) continue;
+
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        preview.appendChild(img);
+    }
+}
+</script>
+
+<!-- ===== BARRA PROGRESO FAKE PRO ===== -->
+<script>
+const form = document.querySelector("form");
+const btn = document.getElementById("btnGenerar");
+const progreso = document.getElementById("progreso");
+const barra = document.getElementById("barra");
+const texto = document.getElementById("textoProgreso");
+
+const mensajes = [
+    "Procesando imágenes...",
+    "Aplicando animaciones...",
+    "Agregando textos...",
+    "Renderizando video..."
+];
+
+form.addEventListener("submit", () => {
+    btn.disabled = true;
+    btn.innerText = "⏳ Generando...";
+    progreso.style.display = "block";
+
+    let porcentaje = 0;
+
+    const intervalo = setInterval(() => {
+        porcentaje += Math.floor(Math.random() * 8) + 4;
+        if (porcentaje >= 95) {
+            porcentaje = 95;
+            clearInterval(intervalo);
+        }
+        barra.style.width = porcentaje + "%";
+        texto.innerText = mensajes[Math.floor(Math.random() * mensajes.length)];
+    }, 600);
+});
+</script>
+
+</body>
+</html>
