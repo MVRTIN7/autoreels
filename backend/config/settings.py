@@ -1,9 +1,9 @@
 # backend/config/settings.py
 import os
+
 # =====================
 # MERCADO PAGO
 # =====================
-MP_PUBLIC_KEY = os.getenv("APP_USR-dd17344d-a0e7-4d80-978f-d7a696220a31")
 MP_ACCESS_TOKEN = os.getenv("MP_ACCESS_TOKEN")
 
 if not MP_ACCESS_TOKEN:
@@ -17,7 +17,6 @@ PLANES_CREDITOS = {
     5: 4500,
     10: 8000
 }
-
 
 # =====================
 # ADMIN
