@@ -41,7 +41,7 @@ imagenes = sorted(os.listdir(fotos_dir))
 with open("imagenes.txt", "w", encoding="utf-8") as f:
     for img in imagenes:
         f.write(f"file '{fotos_dir}/{img}'\n")
-        f.write("duration 1.2\n")
+        f.write("duration 2\n")
 
 # =========================
 # VIDEO BASE 9:16 (SIN ZOOM)
