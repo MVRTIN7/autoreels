@@ -1,20 +1,13 @@
 import mercadopago
 from backend.config.settings import MP_ACCESS_TOKEN, PLANES_CREDITOS
 
-# =========================
-# SDK
-# =========================
-sdk = mercadopago.SDK(str(MP_ACCESS_TOKEN))
+sdk = mercadopago.SDK(MP_ACCESS_TOKEN)
 
-
-# =========================
-# CREAR PREFERENCIA
-# =========================
 def crear_preferencia(user_id, creditos):
 
     monto = PLANES_CREDITOS.get(creditos)
     if not monto:
-        print("❌ Plan de créditos inválido:", creditos)
+        print("❌ Plan inválido:", creditos)
         return None
 
     preference_data = {
@@ -41,8 +34,7 @@ def crear_preferencia(user_id, creditos):
 
     preference = sdk.preference().create(preference_data)
 
-    # 🔴 LOG COMPLETO
-    print("🔴 RESPUESTA COMPLETA MP:", preference)
+    print("🟢 RESPUESTA MP:", preference)
 
     if preference.get("status") != 201:
         print("❌ ERROR MP:", preference)
