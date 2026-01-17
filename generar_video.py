@@ -43,14 +43,18 @@ with open("imagenes.txt", "w", encoding="utf-8") as f:
         f.write(f"file '{fotos_dir}/{img}'\n")
         f.write("duration 1.5\n")
 
+ # repetir última imagen para que FFmpeg respete duración
+    f.write(f"file '{fotos_dir}/{imagenes[-1]}'\n")
+
 # =========================
 # VIDEO BASE 9:16 (SIN ZOOM)
 # =========================
 subprocess.call([
     "ffmpeg", "-y",
     "-f", "concat", "-safe", "0",
+    "-vsync", "vfr",
     "-i", "imagenes.txt",
-    "-vf",
+    "-vf", 
     "scale=1080:1920:force_original_aspect_ratio=decrease,"
     "pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black",
     "-pix_fmt", "yuv420p",
@@ -119,3 +123,9 @@ if os.path.exists("base.mp4"):
 
 if os.path.exists("imagenes.txt"):
     os.remove("imagenes.txt")
+
+for img in os.listdir(fotos_dir):
+    try:
+        os.remove(os.path.join(fotos_dir, img))
+    except:
+        pass
